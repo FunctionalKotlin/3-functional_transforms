@@ -29,7 +29,9 @@ fun metrics() {
     }
 }
 
-fun hostInfo(database: JsonArray<JsonObject>, host: String): Pair<Int, Int> {
+typealias HostInfo = Pair<Int, Int>
+
+fun hostInfo(database: JsonArray<JsonObject>, host: String): HostInfo {
     var count = 0
     var age = 0
 
@@ -48,5 +50,5 @@ fun hostInfo(database: JsonArray<JsonObject>, host: String): Pair<Int, Int> {
         }
     }
 
-    return Pair(count, age / count)
+    return HostInfo(count, age / count)
 }
