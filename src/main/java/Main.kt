@@ -29,7 +29,7 @@ fun metrics() {
     }
 }
 
-typealias HostInfo = Pair<Int, Int>
+data class HostInfo(val count: Int, val age: Int)
 
 fun hostInfo(database: JsonArray<JsonObject>, host: String): HostInfo {
     var count = 0
