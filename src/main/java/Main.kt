@@ -14,18 +14,8 @@ fun metrics() {
         userDatabase.addAll(database)
     }
 
-    var hosts = mutableListOf<String>()
-
-    for (user in userDatabase) {
-        var email = user["email"] as? String
-
-        if (email != null) {
-            var host = email.substringAfter("@")
-
-            if (!hosts.contains(host)) {
-                hosts.add(host)
-            }
-        }
+    val hosts: List<String?> = userDatabase.map { user ->
+        (user["email"] as? String)?.substringAfter("@")
     }
 
     var hostsInfo = mutableListOf<HostInfo>()
