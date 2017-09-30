@@ -4,7 +4,7 @@ import com.beust.klaxon.JsonArray
 import com.beust.klaxon.JsonObject
 
 fun main(args: Array<String>) {
-    println(databases)
+    metrics()
 }
 
 fun metrics() {
@@ -26,6 +26,18 @@ fun metrics() {
                 hosts.add(host)
             }
         }
+    }
+
+    var hostsInfo = mutableListOf<HostInfo>()
+
+    for (host in hosts) {
+        hostsInfo.add(hostInfo(userDatabase, host))
+    }
+
+    for (i in 0 until hosts.count()) {
+        println("Host: ${hosts[i]}")
+        println("  - Count: ${hostsInfo[i].count} users")
+        println("  - Average age: ${hostsInfo[i].age} years old")
     }
 }
 
