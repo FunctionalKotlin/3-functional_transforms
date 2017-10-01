@@ -19,9 +19,7 @@ fun metrics() {
 
     val hosts: List<String> = userDatabase
         .mapNotNull(JsonObject::host)
-        .fold(emptyList()) { acc, host ->
-            if (acc.contains(host)) acc else acc + host
-        }
+        .distinct()
 
     val hostsInfo = hosts.map(hostInfo(userDatabase))
 
