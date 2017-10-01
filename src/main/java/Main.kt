@@ -17,14 +17,22 @@ fun metrics() {
     val hosts: List<String> =
         userDatabase.mapNotNull { (it["email"] as? String)?.substringAfter("@") }
 
-    var hostsInfo = mutableListOf<HostInfo>()
+    var uniqueHosts = mutableListOf<String>()
 
     for (host in hosts) {
+        if (!uniqueHosts.contains(host)) {
+            uniqueHosts.add(host)
+        }
+    }
+
+    var hostsInfo = mutableListOf<HostInfo>()
+
+    for (host in uniqueHosts) {
         hostsInfo.add(hostInfo(userDatabase, host))
     }
 
-    for (i in 0 until hosts.count()) {
-        println("Host: ${hosts[i]}")
+    for (i in 0 until uniqueHosts.count()) {
+        println("Host: ${uniqueHosts[i]}")
         println("  - Count: ${hostsInfo[i].count} users")
         println("  - Average age: ${hostsInfo[i].age} years old")
     }
