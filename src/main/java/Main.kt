@@ -7,6 +7,9 @@ fun main(args: Array<String>) {
     metrics()
 }
 
+private val JsonObject.host: String?
+    get() = (this["email"] as? String)?.substringAfter("@")
+
 fun metrics() {
     var userDatabase = JsonArray<JsonObject>()
 
@@ -14,8 +17,7 @@ fun metrics() {
         userDatabase.addAll(database)
     }
 
-    val hosts: List<String> =
-        userDatabase.mapNotNull { (it["email"] as? String)?.substringAfter("@") }
+    val hosts: List<String> = userDatabase.mapNotNull(JsonObject::host)
 
     var uniqueHosts = mutableListOf<String>()
 
@@ -38,7 +40,7 @@ data class HostInfo(val count: Int, val age: Int)
 
 fun hostInfo(database: JsonArray<JsonObject>): (String) -> HostInfo = { host ->
     database.fold(HostInfo(0, 0)) { (count, age), user ->
-        (user["email"] as? String)?.substringAfter("@")?.let { userHost ->
+        user.host?.let { userHost ->
             (user["age"] as? Int)
                 ?.takeIf { userHost == host }
                 ?.let { HostInfo(count + 1, age + it) }
