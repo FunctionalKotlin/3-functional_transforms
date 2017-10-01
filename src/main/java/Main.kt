@@ -25,7 +25,7 @@ fun metrics() {
         }
     }
 
-    val hostsInfo = uniqueHosts.map { hostInfo(userDatabase, it) }
+    val hostsInfo = uniqueHosts.map(hostInfo(userDatabase))
 
     for (i in 0 until uniqueHosts.count()) {
         println("Host: ${uniqueHosts[i]}")
@@ -36,7 +36,7 @@ fun metrics() {
 
 data class HostInfo(val count: Int, val age: Int)
 
-fun hostInfo(database: JsonArray<JsonObject>, host: String): HostInfo {
+fun hostInfo(database: JsonArray<JsonObject>): (String) -> HostInfo = { host ->
     var count = 0
     var age = 0
 
@@ -55,5 +55,5 @@ fun hostInfo(database: JsonArray<JsonObject>, host: String): HostInfo {
         }
     }
 
-    return HostInfo(count, age / count)
+    HostInfo(count, age / count)
 }
