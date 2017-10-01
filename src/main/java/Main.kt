@@ -16,8 +16,7 @@ fun metrics() {
 
     val hosts: List<String> = userDatabase
         .map { (it["email"] as? String)?.substringAfter("@") }
-        .filter { it != null }
-        .map { it!! }
+        .filterNotNull()
 
     var hostsInfo = mutableListOf<HostInfo>()
 
