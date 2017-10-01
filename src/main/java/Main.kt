@@ -18,9 +18,7 @@ fun metrics() {
 
     val hostsInfo = hosts.map(hostInfo(userDatabase))
 
-    val result = hosts zip hostsInfo
-
-    for ((host, info) in result) {
+    hosts.zip(hostsInfo).forEach { (host, info) ->
         println("Host: $host")
         println("  - Count: ${info.count} users")
         println("  - Average age: ${info.age} years old")
