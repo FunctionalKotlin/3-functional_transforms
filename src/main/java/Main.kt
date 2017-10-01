@@ -25,11 +25,7 @@ fun metrics() {
         }
     }
 
-    var hostsInfo = mutableListOf<HostInfo>()
-
-    for (host in uniqueHosts) {
-        hostsInfo.add(hostInfo(userDatabase, host))
-    }
+    val hostsInfo = uniqueHosts.map { hostInfo(userDatabase, it) }
 
     for (i in 0 until uniqueHosts.count()) {
         println("Host: ${uniqueHosts[i]}")
