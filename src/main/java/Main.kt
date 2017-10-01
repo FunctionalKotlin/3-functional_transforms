@@ -18,11 +18,14 @@ fun metrics() {
 
     val hostsInfo = hosts.map(hostInfo(userDatabase))
 
-    hosts.zip(hostsInfo).forEach { (host, info) ->
-        println("Host: $host")
-        println("  - Count: ${info.count} users")
-        println("  - Average age: ${info.age} years old")
-    }
+    hosts
+        .zip(hostsInfo)
+        .sortedBy { it.first }
+        .forEach { (host, info) ->
+            println("Host: $host")
+            println("  - Count: ${info.count} users")
+            println("  - Average age: ${info.age} years old")
+        }
 }
 
 data class HostInfo(val count: Int, val age: Int)
