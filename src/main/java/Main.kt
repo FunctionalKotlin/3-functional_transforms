@@ -37,23 +37,13 @@ fun metrics() {
 data class HostInfo(val count: Int, val age: Int)
 
 fun hostInfo(database: JsonArray<JsonObject>): (String) -> HostInfo = { host ->
-    var count = 0
-    var age = 0
-
-    for (user in database) {
-
-        val email = user["email"] as? String
-
-        if (email != null) {
-            val userHost = email.substringAfter("@")
-            val userAge = user["age"] as? Int
-
-            if (userAge != null && userHost == host) {
-                count += 1
-                age += userAge
-            }
-        }
+    database.fold(HostInfo(0, 0)) { (count, age), user ->
+        (user["email"] as? String)?.substringAfter("@")?.let { userHost ->
+            (user["age"] as? Int)
+                ?.takeIf { userHost == host }
+                ?.let { HostInfo(count + 1, age + it) }
+        } ?: HostInfo(count, age)
+    }.let { (count, age) ->
+        HostInfo(count, age / count)
     }
-
-    HostInfo(count, age / count)
 }
