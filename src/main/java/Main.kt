@@ -17,20 +17,16 @@ fun metrics() {
         userDatabase.addAll(database)
     }
 
-    val hosts: List<String> = userDatabase.mapNotNull(JsonObject::host)
-
-    var uniqueHosts = mutableListOf<String>()
-
-    for (host in hosts) {
-        if (!uniqueHosts.contains(host)) {
-            uniqueHosts.add(host)
+    val hosts: List<String> = userDatabase
+        .mapNotNull(JsonObject::host)
+        .fold(emptyList()) { acc, host ->
+            if (acc.contains(host)) acc else acc + host
         }
-    }
 
-    val hostsInfo = uniqueHosts.map(hostInfo(userDatabase))
+    val hostsInfo = hosts.map(hostInfo(userDatabase))
 
-    for (i in 0 until uniqueHosts.count()) {
-        println("Host: ${uniqueHosts[i]}")
+    for (i in 0 until hosts.count()) {
+        println("Host: ${hosts[i]}")
         println("  - Count: ${hostsInfo[i].count} users")
         println("  - Average age: ${hostsInfo[i].age} years old")
     }
