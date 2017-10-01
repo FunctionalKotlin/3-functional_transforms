@@ -1,6 +1,5 @@
 // Copyright © FunctionalKotlin.com 2017. All rights reserved.
 
-import com.beust.klaxon.JsonArray
 import com.beust.klaxon.JsonObject
 
 fun main(args: Array<String>) {
@@ -11,11 +10,7 @@ private val JsonObject.host: String?
     get() = (this["email"] as? String)?.substringAfter("@")
 
 fun metrics() {
-    var userDatabase = JsonArray<JsonObject>()
-
-    for (database in databases) {
-        userDatabase.addAll(database)
-    }
+    val userDatabase = databases.flatMap { it }
 
     val hosts: List<String> = userDatabase
         .mapNotNull(JsonObject::host)
@@ -32,7 +27,7 @@ fun metrics() {
 
 data class HostInfo(val count: Int, val age: Int)
 
-fun hostInfo(database: JsonArray<JsonObject>): (String) -> HostInfo = { host ->
+fun hostInfo(database: List<JsonObject>): (String) -> HostInfo = { host ->
     database.fold(HostInfo(0, 0)) { (count, age), user ->
         user.host?.let { userHost ->
             (user["age"] as? Int)
