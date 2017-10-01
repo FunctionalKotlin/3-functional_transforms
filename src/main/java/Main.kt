@@ -10,7 +10,7 @@ private val JsonObject.host: String?
     get() = (this["email"] as? String)?.substringAfter("@")
 
 fun metrics() {
-    val userDatabase = databases.flatMap { it }
+    val userDatabase = databases.flatten()
 
     val hosts: List<String> = userDatabase
         .mapNotNull(JsonObject::host)
